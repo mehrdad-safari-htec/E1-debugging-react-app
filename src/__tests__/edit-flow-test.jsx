@@ -1,7 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { vi } from 'vitest'
 import App from '../App'
 
-global.fetch = jest.fn()
+global.fetch = vi.fn()
 
 const mockFeedbackData = [
   { id: 1, rating: 10, text: 'This is feedback item 1 coming from the backend' },
@@ -112,6 +113,56 @@ describe('Feedback Edit Flow', () => {
     // Assert new feedback card is added
     await waitFor(() => {
       expect(screen.getByText('Brand new feedback item')).toBeInTheDocument()
+    })
+  })
+
+  test('should have correct button CSS classes during edit flow', async () => {
+    fetch.mockResolvedValueOnce({
+      json: async () => mockFeedbackData
+    })
+    
+    render(<App />)
+    
+    await waitFor(() => {
+      expect(screen.getByText('This is feedback item 1 coming from the backend')).toBeInTheDocument()
+    })
+
+    // Initially button should be disabled
+    const initialButton = screen.getByText('Send')
+    expect(initialButton).toBeDisabled()
+    expect(initialButton).toHaveClass('btn')
+    expect(initialButton).not.toHaveClass('btn-primary')
+
+    // Click edit - button should become enabled with primary class
+    const editButton = document.querySelector('.edit')
+    fireEvent.click(editButton)
+
+    await waitFor(() => {
+      const editModeButton = screen.getByText('Send')
+      expect(editModeButton).not.toBeDisabled()
+      expect(editModeButton).toHaveClass('btn', 'btn-primary')
+      expect(editModeButton).not.toHaveClass('btn-undefined')
+    })
+
+    // Type short text - button should be disabled
+    const textInput = screen.getByPlaceholderText('Write a review')
+    fireEvent.change(textInput, { target: { value: 'short' } })
+
+    await waitFor(() => {
+      const disabledButton = screen.getByText('Send')
+      expect(disabledButton).toBeDisabled()
+      expect(disabledButton).toHaveClass('btn')
+      expect(disabledButton).not.toHaveClass('btn-primary')
+    })
+
+    // Type valid text - button should be enabled with primary class
+    fireEvent.change(textInput, { target: { value: 'This is a valid long text' } })
+
+    await waitFor(() => {
+      const enabledButton = screen.getByText('Send')
+      expect(enabledButton).not.toBeDisabled()
+      expect(enabledButton).toHaveClass('btn', 'btn-primary')
+      expect(enabledButton).not.toHaveClass('btn-undefined')
     })
   })
 })
