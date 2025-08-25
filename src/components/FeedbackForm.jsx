@@ -22,18 +22,19 @@ function FeedbackForm() {
   }, [feedbackEdit])
 
   const handleTextChange = (e) => {
-    if (text === '') {
+    const newText = e.target.value
+    setText(newText)
+    
+    if (newText === '') {
       setBtnDisabled(true)
       setMessage(null)
-    } else if (text !== '' && text.trim().length <= 10) {
+    } else if (newText !== '' && newText.trim().length <= 10) {
       setMessage('Text must be at least 10 characters')
       setBtnDisabled(true)
     } else {
       setMessage(null)
       setBtnDisabled(false)
     }
-
-    setText(e.target.value)
   }
 
   const handleSubmit = (e) => {
@@ -51,6 +52,8 @@ function FeedbackForm() {
       }
 
       setText('')
+      setRating(10)
+      setBtnDisabled(true)
     }
   }
 

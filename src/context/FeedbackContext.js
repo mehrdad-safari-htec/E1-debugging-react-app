@@ -62,6 +62,12 @@ export const FeedbackProvider = ({ children }) => {
     setFeedback(
       feedback.map((item) => (item.id === id ? { ...item, ...data } : item))
     )
+    
+    // Clear edit state after successful update
+    setFeedbackEdit({
+      item: {},
+      edit: false,
+    })
   }
 
   // Set item to be updated
@@ -69,6 +75,14 @@ export const FeedbackProvider = ({ children }) => {
     setFeedbackEdit({
       item,
       edit: true,
+    })
+  }
+
+  // Clear edit state
+  const clearEditState = () => {
+    setFeedbackEdit({
+      item: {},
+      edit: false,
     })
   }
 
@@ -82,6 +96,7 @@ export const FeedbackProvider = ({ children }) => {
         addFeedback,
         editFeedback,
         updateFeedback,
+        clearEditState,
       }}
     >
       {children}
