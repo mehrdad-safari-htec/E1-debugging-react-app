@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import RatingSelect from './RatingSelect'
 import Card from './shared/Card'
 import Button from './shared/Button'
-import FeedbackContext from '../context/FeedbackContext'
+import FeedbackContext from '../context/FeedbackContext.jsx'
 
 function FeedbackForm() {
   const [text, setText] = useState('')
@@ -71,7 +71,7 @@ function FeedbackForm() {
             placeholder='Write a review'
             value={text}
           />
-          <Button type='submit' isDisabled={btnDisabled}>
+          <Button type='submit' version='primary' isDisabled={btnDisabled}>
             Send
           </Button>
         </div>

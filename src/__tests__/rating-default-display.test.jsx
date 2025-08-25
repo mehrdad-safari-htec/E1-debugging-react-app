@@ -1,9 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react'
+import { vi } from 'vitest'
 import RatingSelect from '../components/RatingSelect'
 
 describe('RatingSelect Default Rating Display', () => {
   test('should display default rating of 10 on initial mount', () => {
-    const mockOnSelect = jest.fn()
+    const mockOnSelect = vi.fn()
     
     render(<RatingSelect selected={10} onSelect={mockOnSelect} />)
     
@@ -16,7 +17,7 @@ describe('RatingSelect Default Rating Display', () => {
   })
 
   test('should show selected rating when prop is provided', () => {
-    const mockOnSelect = jest.fn()
+    const mockOnSelect = vi.fn()
     
     render(<RatingSelect selected={7} onSelect={mockOnSelect} />)
     
@@ -28,7 +29,7 @@ describe('RatingSelect Default Rating Display', () => {
   })
 
   test('should call onSelect when rating is changed', () => {
-    const mockOnSelect = jest.fn()
+    const mockOnSelect = vi.fn()
     
     render(<RatingSelect selected={10} onSelect={mockOnSelect} />)
     
@@ -39,7 +40,7 @@ describe('RatingSelect Default Rating Display', () => {
   })
 
   test('should render all rating options using iteration', () => {
-    const mockOnSelect = jest.fn()
+    const mockOnSelect = vi.fn()
     
     render(<RatingSelect selected={10} onSelect={mockOnSelect} />)
     
@@ -51,7 +52,7 @@ describe('RatingSelect Default Rating Display', () => {
   })
 
   test('should update selection when selected prop changes', () => {
-    const mockOnSelect = jest.fn()
+    const mockOnSelect = vi.fn()
     const { rerender } = render(<RatingSelect selected={10} onSelect={mockOnSelect} />)
     
     expect(screen.getByLabelText('10')).toBeChecked()
@@ -63,7 +64,7 @@ describe('RatingSelect Default Rating Display', () => {
   })
 
   test('should work as controlled component without internal state', () => {
-    const mockOnSelect = jest.fn()
+    const mockOnSelect = vi.fn()
     
     render(<RatingSelect selected={8} onSelect={mockOnSelect} />)
     

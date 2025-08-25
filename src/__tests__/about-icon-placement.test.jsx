@@ -1,7 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react'
+import { vi } from 'vitest'
 import App from '../App'
 
-global.fetch = jest.fn()
+global.fetch = vi.fn()
 
 const createManyFeedbackItems = (count) => {
   return Array.from({ length: count }, (_, i) => ({
@@ -15,7 +16,7 @@ describe('About Icon Placement', () => {
   beforeEach(() => {
     fetch.mockClear()
     // Mock getComputedStyle to return expected CSS values
-    window.getComputedStyle = jest.fn(() => ({
+    window.getComputedStyle = vi.fn(() => ({
       position: 'fixed',
       bottom: '20px',
       right: '20px'

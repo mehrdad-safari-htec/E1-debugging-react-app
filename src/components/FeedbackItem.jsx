@@ -2,7 +2,7 @@ import { FaTimes, FaEdit } from 'react-icons/fa'
 import { useContext } from 'react'
 import PropTypes from 'prop-types'
 import Card from './shared/Card'
-import FeedbackContext from '../context/FeedbackContext'
+import FeedbackContext from '../context/FeedbackContext.jsx'
 
 function FeedbackItem({ item }) {
   const { deleteFeedback, editFeedback } = useContext(FeedbackContext)
