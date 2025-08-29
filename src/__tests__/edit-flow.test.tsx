@@ -1,21 +1,23 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
 import App from '../App'
+import { FeedbackItem } from '../types'
 
-global.fetch = vi.fn()
+const mockFetch = vi.fn() as any
+global.fetch = mockFetch
 
-const mockFeedbackData = [
+const mockFeedbackData: FeedbackItem[] = [
   { id: 1, rating: 10, text: 'This is feedback item 1 coming from the backend' },
   { id: 2, rating: 8, text: 'This is feedback item 2 coming from the backend' }
 ]
 
 describe('Feedback Edit Flow', () => {
   beforeEach(() => {
-    fetch.mockClear()
+    mockFetch.mockClear()
   })
 
   test('should click edit on existing feedback item', async () => {
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => mockFeedbackData
     })
     
@@ -27,11 +29,11 @@ describe('Feedback Edit Flow', () => {
 
     const editButton = document.querySelector('.edit')
     expect(editButton).toBeTruthy()
-    fireEvent.click(editButton)
+    fireEvent.click(editButton!)
   })
 
   test('should assert form is prefilled after clicking edit', async () => {
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => mockFeedbackData
     })
     
@@ -42,9 +44,9 @@ describe('Feedback Edit Flow', () => {
     })
 
     const editButton = document.querySelector('.edit')
-    fireEvent.click(editButton)
+    fireEvent.click(editButton!)
 
-    const textInput = screen.getByPlaceholderText('Write a review')
+    const textInput = screen.getByPlaceholderText('Write a review') as HTMLInputElement
     expect(textInput.value).toBe('This is feedback item 1 coming from the backend')
     
     const rating10 = screen.getByLabelText('10')
@@ -53,7 +55,7 @@ describe('Feedback Edit Flow', () => {
 
   test('should complete edit flow then add new feedback', async () => {
     // Mock initial GET request
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => mockFeedbackData
     })
     
@@ -65,7 +67,7 @@ describe('Feedback Edit Flow', () => {
 
     // Edit existing feedback
     const editButton = document.querySelector('.edit')
-    fireEvent.click(editButton)
+    fireEvent.click(editButton!)
 
     const textInput = screen.getByPlaceholderText('Write a review')
     fireEvent.change(textInput, { target: { value: 'Updated feedback text' } })
@@ -74,7 +76,7 @@ describe('Feedback Edit Flow', () => {
     fireEvent.click(rating7)
 
     // Mock PUT request for update
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => ({ id: 1, rating: 7, text: 'Updated feedback text' })
     })
 
@@ -87,7 +89,7 @@ describe('Feedback Edit Flow', () => {
 
     // Add new feedback after edit
     await waitFor(() => {
-      const newTextInput = screen.getByPlaceholderText('Write a review')
+      const newTextInput = screen.getByPlaceholderText('Write a review') as HTMLInputElement
       expect(newTextInput.value).toBe('')
     })
     
@@ -104,7 +106,7 @@ describe('Feedback Edit Flow', () => {
     })
 
     // Mock POST request for new feedback
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => ({ id: 3, rating: 9, text: 'Brand new feedback item' })
     })
 
@@ -117,7 +119,7 @@ describe('Feedback Edit Flow', () => {
   })
 
   test('should have correct button CSS classes during edit flow', async () => {
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => mockFeedbackData
     })
     
@@ -135,7 +137,7 @@ describe('Feedback Edit Flow', () => {
 
     // Click edit - button should become enabled with primary class
     const editButton = document.querySelector('.edit')
-    fireEvent.click(editButton)
+    fireEvent.click(editButton!)
 
     await waitFor(() => {
       const editModeButton = screen.getByText('Send')

@@ -1,5 +1,12 @@
-function RatingSelect({ selected, onSelect }) {
-  const handleChange = (e) => {
+import { ChangeEvent } from 'react'
+
+interface RatingSelectProps {
+  selected: number
+  onSelect: (rating: number) => void
+}
+
+function RatingSelect({ selected, onSelect }: RatingSelectProps) {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onSelect(+e.currentTarget.value)
   }
 
