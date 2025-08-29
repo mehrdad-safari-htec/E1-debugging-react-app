@@ -1,4 +1,6 @@
-const FeedbackData = [
+import { FeedbackItem } from '../types'
+
+const FeedbackData: FeedbackItem[] = [
   {
     id: 1,
     rating: 10,

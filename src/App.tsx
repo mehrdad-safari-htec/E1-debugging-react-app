@@ -5,7 +5,7 @@ import FeedbackStats from './components/FeedbackStats'
 import FeedbackForm from './components/FeedbackForm'
 import AboutIconLink from './components/AboutIconLink'
 import AboutPage from './pages/AboutPage'
-import { FeedbackProvider } from './context/FeedbackContext.jsx'
+import { FeedbackProvider } from './context/FeedbackContext'
 
 function App() {
   return (
@@ -15,7 +15,6 @@ function App() {
         <div className='container'>
           <Routes>
             <Route
-              exact
               path='/'
               element={
                 <>

@@ -1,11 +1,17 @@
 import { FaTimes, FaEdit } from 'react-icons/fa'
 import { useContext } from 'react'
-import PropTypes from 'prop-types'
 import Card from './shared/Card'
-import FeedbackContext from '../context/FeedbackContext.jsx'
+import FeedbackContext from '../context/FeedbackContext'
+import { FeedbackItem as FeedbackItemType } from '../types'
 
-function FeedbackItem({ item }) {
-  const { deleteFeedback, editFeedback } = useContext(FeedbackContext)
+interface FeedbackItemProps {
+  item: FeedbackItemType
+}
+
+function FeedbackItem({ item }: FeedbackItemProps) {
+  const context = useContext(FeedbackContext)
+  if (!context) throw new Error('FeedbackItem must be used within FeedbackProvider')
+  const { deleteFeedback, editFeedback } = context
 
   return (
     <Card>
@@ -19,10 +25,6 @@ function FeedbackItem({ item }) {
       <div className='text-display'>{item.text}</div>
     </Card>
   )
-}
-
-FeedbackItem.propTypes = {
-  item: PropTypes.object.isRequired,
 }
 
 export default FeedbackItem

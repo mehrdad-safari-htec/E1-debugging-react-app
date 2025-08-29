@@ -1,11 +1,13 @@
 import { useContext } from 'react'
-import FeedbackContext from '../context/FeedbackContext.jsx'
+import FeedbackContext from '../context/FeedbackContext'
 
 function FeedbackStats() {
-  const { feedback } = useContext(FeedbackContext)
+  const context = useContext(FeedbackContext)
+  if (!context) throw new Error('FeedbackStats must be used within FeedbackProvider')
+  const { feedback } = context
 
   // Calculate ratings avg
-  let average =
+  let average: number | string =
     feedback.reduce((acc, cur) => {
       return acc + cur.rating
     }, 0) / feedback.length
@@ -15,7 +17,7 @@ function FeedbackStats() {
   return (
     <div className='feedback-stats'>
       <h4>{feedback.length} Reviews</h4>
-      <h4>Average Rating: {isNaN(average) ? 0 : average}</h4>
+      <h4>Average Rating: {isNaN(Number(average)) ? 0 : average}</h4>
     </div>
   )
 }

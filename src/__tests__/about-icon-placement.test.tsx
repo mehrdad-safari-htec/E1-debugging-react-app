@@ -1,10 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
 import App from '../App'
+import { FeedbackItem } from '../types'
 
-global.fetch = vi.fn()
+const mockFetch = vi.fn() as any
+global.fetch = mockFetch
 
-const createManyFeedbackItems = (count) => {
+const createManyFeedbackItems = (count: number): FeedbackItem[] => {
   return Array.from({ length: count }, (_, i) => ({
     id: i + 1,
     rating: Math.floor(Math.random() * 10) + 1,
@@ -14,20 +16,20 @@ const createManyFeedbackItems = (count) => {
 
 describe('About Icon Placement', () => {
   beforeEach(() => {
-    fetch.mockClear()
+    mockFetch.mockClear()
     // Mock getComputedStyle to return expected CSS values
     window.getComputedStyle = vi.fn(() => ({
       position: 'fixed',
       bottom: '20px',
       right: '20px'
-    }))
+    } as CSSStyleDeclaration))
   })
 
   test('should keep about icon at bottom-right with fixed positioning', async () => {
     // Mock many feedback items to create scrollable content
     const manyFeedbackItems = createManyFeedbackItems(15)
     
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => manyFeedbackItems
     })
 
@@ -46,7 +48,7 @@ describe('About Icon Placement', () => {
     expect(aboutIcon).toHaveClass('about-link')
     
     // Mock getComputedStyle returns expected values
-    const aboutIconStyles = window.getComputedStyle(aboutIcon)
+    const aboutIconStyles = window.getComputedStyle(aboutIcon!)
     expect(aboutIconStyles.position).toBe('fixed')
     expect(aboutIconStyles.bottom).toBe('20px')
     expect(aboutIconStyles.right).toBe('20px')
@@ -56,7 +58,7 @@ describe('About Icon Placement', () => {
     // Start with few feedback items
     const initialFeedback = createManyFeedbackItems(3)
     
-    fetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       json: async () => initialFeedback
     })
 
@@ -69,7 +71,7 @@ describe('About Icon Placement', () => {
     const aboutIcon = document.querySelector('.about-link')
     expect(aboutIcon).toHaveClass('about-link')
     
-    const aboutIconStyles = window.getComputedStyle(aboutIcon)
+    const aboutIconStyles = window.getComputedStyle(aboutIcon!)
     expect(aboutIconStyles.position).toBe('fixed')
     expect(aboutIconStyles.bottom).toBe('20px')
     expect(aboutIconStyles.right).toBe('20px')
